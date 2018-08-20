@@ -56,7 +56,7 @@ var userSchema = new Schema({
   'type': String,
   'default': shortid.generate
   },
-  username : { type: String, required: true },
+  username : String,
   exercices :{ type: Schema.Types.ObjectId, ref:'Exercice'}
 });
 var User = mongoose.model('User', userSchema);
@@ -84,12 +84,13 @@ app.route('/api/exercise/add').post((req,res)=> {
     User.findOne({_id:req.body.userId},(err,data)=>{
       if (err) console.log(err);
       else {
-        Exercice.create({user:data._id,
+        console.log(req.body)
+        Exercice.create({user:req.body.userId,
                          description:req.body.description,
                         duration:req.body.duration,
-                        date:req.body.date},(err,data)=>{
+                        date:req.body.date},(err,dat)=>{
           if (err) console.log(err);
-          else res.json(data)
+          else res.json(dat)
         })
       }
     })
