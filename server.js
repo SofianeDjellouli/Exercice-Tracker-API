@@ -57,7 +57,7 @@ var userSchema = new Schema({
   'default': shortid.generate
   },
   username : { type: String, required: true },
-  exercices :[{ type: Schema.Types.ObjectId, ref:'Exercice'}]
+  exercices :{ type: Schema.Types.ObjectId, ref:'Exercice'}
 });
 var User = mongoose.model('User', userSchema);
 
@@ -73,13 +73,24 @@ var exerciceSchema = new Schema({
 });
 var Exercice = mongoose.model('Exercice', userSchema);
 
-app.rou/api/exercise/new-user',(req,res)=> {
-  
-  
-  .post((req,res)=> {
-    res.json(req);
+app.route('/api/exercise/new-user').post((req,res)=> {
     User.create({username:req.body.username},(err,data)=>{
       if (err) console.log(err);
       else res.json(data)
+    })
+  })
+
+app.route('/api/exercise/add').post((req,res)=> {
+    User.findOne({_id:req.body.userId},(err,data)=>{
+      if (err) console.log(err);
+      else {
+        Exercice.create({user:data._id,
+                         description:req.body.description,
+                        duration:req.body.duration,
+                        date:req.body.date},(err,data)=>{
+          if (err) console.log(err);
+          else res.json(data)
+        })
+      }
     })
   })
