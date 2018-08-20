@@ -84,7 +84,13 @@ app.route('/api/exercise/add').post((req,res)=> {
           if (err) console.log(err);
           else {
             console.log(dat);
-            res.json(dat)
+            res.json({
+              "username":data.username,
+              "description":dat.description,
+              "duration":dat.duration,
+              "_id":data._id,
+              "date":dat.date.toDateString()
+            })
           }
         })
       }
