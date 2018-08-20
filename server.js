@@ -1,6 +1,7 @@
 const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
+var shortid = require('shortid');
 
 const cors = require('cors')
 
@@ -46,3 +47,14 @@ app.use((err, req, res, next) => {
 const listener = app.listen(process.env.PORT || 3000, () => {
   console.log('Your app is listening on port ' + listener.address().port)
 })
+
+
+var Schema=mongoose.Schema;
+var userSchema = new Schema({
+  _id: {
+  'type': String,
+  'default': shortid.generate
+  },
+  user : { type: String, required: true },
+});
+var User = mongoose.model('User', userSchema);
