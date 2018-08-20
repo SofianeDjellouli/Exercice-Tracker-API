@@ -75,8 +75,9 @@ var Exercice = mongoose.model('Exercice', userSchema);
 
 app.route('/api/exercise/new-user')
   .post((req,res)=> {
-    User.create({username:req.body.username},(err,data)=>{
-      if (err) console.log(err);
-      else res.json({username:data.username,_id:data._id})
-    })
+    res.json(req.body);
+    // User.create({username:req.body.username},(err,data)=>{
+    //   if (err) console.log(err);
+    //   else res.json(data)
+    // })
   })
