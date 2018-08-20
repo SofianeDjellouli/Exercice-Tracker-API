@@ -21,9 +21,9 @@ app.get('/', (req, res) => {
 
 
 // Not found middleware
-app.use((req, res, next) => {
-  return next({status: 404, message: 'not found'})
-})
+// app.use((req, res, next) => {
+//   return next({status: 404, message: 'not found'})
+// })
 
 // Error Handling middleware
 app.use((err, req, res, next) => {
@@ -73,14 +73,13 @@ var exerciceSchema = new Schema({
 });
 var Exercice = mongoose.model('Exercice', userSchema);
 
-app.route('/api/exercise/new-user').get((req,res)=> {
-  res.redirect('http://google.fr')
-});
+app.rou/api/exercise/new-user',(req,res)=> {
   
-//   .post((req,res)=> {
-//     res.json(req);
-    // User.create({username:req.body.username},(err,data)=>{
-    //   if (err) console.log(err);
-    //   else res.json(data)
-    // })
-  // })
+  
+  .post((req,res)=> {
+    res.json(req);
+    User.create({username:req.body.username},(err,data)=>{
+      if (err) console.log(err);
+      else res.json(data)
+    })
+  })
