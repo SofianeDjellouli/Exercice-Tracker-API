@@ -66,37 +66,38 @@ var Exercice = mongoose.model('Exercice', exerciceSchema);
 
 app.route('/api/exercise/new-user').post((req,res)=> {
     User.create({username:req.body.username},(err,data)=>{
-      if (err) console.log(err);
+      if (err) res.send(err);
       else res.json({"username":data.username,"_id":data._id})
     })
   })
 
 app.route('/api/exercise/add').post((req,res)=> {
     User.findOne({_id:req.body.userId},(err,data)=>{
-      if (err) console.log(err);
+      if (err) res.send(err);
       else {
         Exercice.create({user: req.body.userId,
                          description:req.body.description,
                          duration:req.body.duration,
                          date:req.body.date},(err,dat)=>{
-          if (err) console.log(err);
-          else {
-            console.log(dat);
-            res.json({
-              "username":data.username,
-              "description":dat.description,
-              "duration":dat.duration,
-              "_id":dat.user,
-              "date":dat.date.toDateString()
-            })
-          }
+          if (err) res.send(err);
+          else res.json({
+                "username":data.username,
+                "description":dat.description,
+                "duration":dat.duration,
+                "_id":dat.user,
+                "date":dat.date.toDateString()
+              })
         })
       }
     })
   })
 
-// GET /api/exercise/log?{userId}[&from][&to][&limit]
-
 app.route('/api/exercise/log').get((req,res)=>{
-  console.log(req.query)
+  Exercice.find({
+    "user":req.query.userId,
+    "date":{"$gte":req.query.from,"$lte":req.query.to}
+  }).limit(parseInt(req.query.limit)).exec((err,data)=>{
+    if (err) res.send(err);
+    else res.json(data);
+  })
 })
