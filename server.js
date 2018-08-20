@@ -52,20 +52,12 @@ const listener = app.listen(process.env.PORT || 3000, () => {
 var Schema=mongoose.Schema;
 
 var userSchema = new Schema({
-  _id: {
-  'type': String,
-  'default': shortid.generate
-  },
   username : String,
   exercices :[{ type: Schema.Types.ObjectId, ref:'Exercice'}]
 });
 var User = mongoose.model('User', userSchema);
 
 var exerciceSchema = new Schema({
-  _id: {
-    'type': String,
-    'default': shortid.generate
-    },
   user : { type: Schema.Types.ObjectId, ref:'User'},
   description : { type: String, required: true },
   duration:{ type: Number, required: true },
