@@ -99,9 +99,6 @@ app.route('/api/exercise/log').get((req,res)=>{
   }).limit(parseInt(req.query.limit)).select('-_id -__v').exec((err,data)=>{
     if (err) res.send(err);
     else {
-      data=data.map((e)=>{
-        e.date=e.date.toDateString()
-      })
       res.json(data);
     }
   })
