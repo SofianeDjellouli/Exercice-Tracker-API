@@ -71,7 +71,7 @@ var exerciceSchema = new Schema({
   duration:{ type: Number, required: true },
   date: Date,
 });
-var Exercice = mongoose.model('Exercice', userSchema);
+var Exercice = mongoose.model('Exercice', exerciceSchema);
 
 app.route('/api/exercise/new-user').post((req,res)=> {
     User.create({username:req.body.username},(err,data)=>{
@@ -84,8 +84,8 @@ app.route('/api/exercise/add').post((req,res)=> {
     User.findOne({_id:req.body.userId},(err,data)=>{
       if (err) console.log(err);
       else {
-        console.log(req.body)
-        Exercice.create({user:req.body.userId,
+        console.log(mongoose.Types.ObjectId(req.body.userId))
+        Exercice.create({user: req.body.userId,
                          description:req.body.description,
                          duration:req.body.duration,
                          date:req.body.date},(err,dat)=>{
