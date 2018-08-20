@@ -96,8 +96,13 @@ app.route('/api/exercise/log').get((req,res)=>{
   Exercice.find({
     "user":req.query.userId,
     "date":{"$gte":req.query.from,"$lte":req.query.to}
-  }).select('user date').limit(parseInt(req.query.limit)).exec((err,data)=>{
+  }).limit(parseInt(req.query.limit)).select('-_id -__v').exec((err,data)=>{
     if (err) res.send(err);
-    else res.json(data);
+    else {
+      data=data.map((e)=>{
+        e.date=e.date.toDateString()
+      })
+      res.json(data);
+    }
   })
 })
