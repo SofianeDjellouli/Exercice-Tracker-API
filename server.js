@@ -56,7 +56,7 @@ var userSchema = new Schema({
   'type': String,
   'default': shortid.generate
   },
-  name : { type: String, required: true },
+  username : { type: String, required: true },
   exercices :[{ type: Schema.Types.ObjectId, ref:'Exercice'}]
 });
 var User = mongoose.model('User', userSchema);
@@ -69,6 +69,14 @@ var exerciceSchema = new Schema({
   user : { type: Schema.Types.ObjectId, ref:'User'},
   description : { type: String, required: true },
   duration:{ type: Number, required: true },
-  
+  date: Date,
 });
 var Exercice = mongoose.model('Exercice', userSchema);
+
+app.route('/api/exercise/new-user')
+  .post((req,res)=> {
+    User.create({username:req.body.username},(err,data)=>{
+      if (err) console.log(err);
+      else res.json({username:data.username,_id:data._id})
+    })
+  })
