@@ -96,7 +96,7 @@ app.route('/api/exercise/log').get((req,res)=>{
   Exercice.find({
     "user":req.query.userId,
     "date":{"$gte":req.query.from,"$lte":req.query.to}
-  }).limit(parseInt(req.query.limit)).exec((err,data)=>{
+  }).select('user date').limit(parseInt(req.query.limit)).exec((err,data)=>{
     if (err) res.send(err);
     else res.json(data);
   })
