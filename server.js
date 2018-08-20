@@ -87,8 +87,8 @@ app.route('/api/exercise/add').post((req,res)=> {
         console.log(req.body)
         Exercice.create({user:req.body.userId,
                          description:req.body.description,
-                        duration:req.body.duration,
-                        date:req.body.date},(err,dat)=>{
+                         duration:req.body.duration,
+                         date:req.body.date},(err,dat)=>{
           if (err) console.log(err);
           else res.json(dat)
         })
