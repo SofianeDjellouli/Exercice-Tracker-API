@@ -73,10 +73,14 @@ var exerciceSchema = new Schema({
 });
 var Exercice = mongoose.model('Exercice', userSchema);
 
-app.route('/api/exercise/new-user').post((req,res)=> {
-    res.json({ "required": true });
+app.route('/api/exercise/new-user').get((req,res)=> {
+  res.redirect('http://google.fr')
+});
+  
+//   .post((req,res)=> {
+//     res.json(req);
     // User.create({username:req.body.username},(err,data)=>{
     //   if (err) console.log(err);
     //   else res.json(data)
     // })
-  })
+  // })
