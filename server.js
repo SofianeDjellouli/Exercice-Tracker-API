@@ -95,6 +95,7 @@ app.route('/api/exercise/add').post((req,res)=> {
 app.route('/api/exercise/log').get((req,res)=>{
   Exercice.find({
     "user":req.query.userId,
+  }).find({
     "date":{"$gte":req.query.from,"$lte":req.query.to}
   }).limit(parseInt(req.query.limit)).select('-_id -__v').exec((err,data)=>{
     if (err) res.send(err);
