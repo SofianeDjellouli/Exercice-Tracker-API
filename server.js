@@ -48,7 +48,7 @@ const listener = app.listen(process.env.PORT || 3000, () => {
   console.log('Your app is listening on port ' + listener.address().port)
 })
 
-
+// my code below
 var Schema=mongoose.Schema;
 
 var userSchema = new Schema({
@@ -103,11 +103,17 @@ app.route('/api/exercise/log').get((req,res)=>{
   } else if (req.query.to){
     query.date={"$lte":req.query.to}
   }
-  Exercice.find(query).limit(parseInt(req.query.limit)).select('-_id -__v')
+  Exercice.find(query).limit(parseInt(req.query.limit)).select('-_id -user -__v')
     .exec((err,data)=>{
       if (err) res.send(err);
       else {
-        res.json(data);
+        console.log(User.findById(req.query.userId, (err,dat)=> dat))
+        res.json({
+          "_id":req.query.userId,
+          "username":User.findOne({_id:req.query.userId}).username,
+          "count":data.length,
+          "log":data
+        });
       }
     })
 })
