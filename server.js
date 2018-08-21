@@ -78,7 +78,7 @@ app.route('/api/exercise/add').post((req,res)=> {
         Exercice.create({user: req.body.userId,
                          description:req.body.description,
                          duration:req.body.duration,
-                         date:req.body.date.toDateString()},(err,dat)=>{
+                         date:new Date(req.body.date).toDateString()},(err,dat)=>{
           if (err) res.send(err);
           else res.json({
                 "username":data.username,
