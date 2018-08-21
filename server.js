@@ -60,7 +60,7 @@ var exerciceSchema = new Schema({
   user : { type: Schema.Types.ObjectId, ref:'User'},
   description : { type: String, required: true },
   duration:{ type: Number, required: true },
-  date: Date,
+  date: String,
 });
 var Exercice = mongoose.model('Exercice', exerciceSchema);
 
@@ -78,14 +78,14 @@ app.route('/api/exercise/add').post((req,res)=> {
         Exercice.create({user: req.body.userId,
                          description:req.body.description,
                          duration:req.body.duration,
-                         date:req.body.date},(err,dat)=>{
+                         date:req.body.date.toDateString()},(err,dat)=>{
           if (err) res.send(err);
           else res.json({
                 "username":data.username,
                 "description":dat.description,
                 "duration":dat.duration,
                 "_id":dat.user,
-                "date":dat.date.toDateString()
+                "date":dat.date
               })
         })
       }
@@ -93,14 +93,21 @@ app.route('/api/exercise/add').post((req,res)=> {
   })
 
 app.route('/api/exercise/log').get((req,res)=>{
-  Exercice.find({
+  var query={
     "user":req.query.userId,
-  }).find({
-    "date":{"$gte":req.query.from,"$lte":req.query.to}
-  }).limit(parseInt(req.query.limit)).select('-_id -__v').exec((err,data)=>{
-    if (err) res.send(err);
-    else {
-      res.json(data);
-    }
-  })
+  }
+  if (req.query.from && req.query.to){
+    query.date={"$gte":req.query.from,"$lte":req.query.to}
+  } else if(req.query.from){
+    query.date={"$gte":req.query.from}
+  } else if (req.query.to){
+    query.date={"$lte":req.query.to}
+  }
+  Exercice.find(query).limit(parseInt(req.query.limit)).select('-_id -__v')
+    .exec((err,data)=>{
+      if (err) res.send(err);
+      else {
+        res.json(data);
+      }
+    })
 })
