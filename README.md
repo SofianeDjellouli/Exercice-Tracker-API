@@ -1,4 +1,4 @@
-# Exercise Tracker REST API
+# Exercise Tracker REST API built with Node, Express and Mangoose
 
 #### A microservice project, part of Free Code Camp's curriculum
 
