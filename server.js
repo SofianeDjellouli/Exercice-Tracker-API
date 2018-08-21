@@ -107,10 +107,10 @@ app.route('/api/exercise/log').get((req,res)=>{
     .exec((err,data)=>{
       if (err) res.send(err);
       else {
-        console.log(User.findById(req.query.userId, (err,dat)=> dat))
+        console.log(User.findById(req.query.userId).exec())
         res.json({
           "_id":req.query.userId,
-          "username":User.findOne({_id:req.query.userId}).username,
+          "username":user,
           "count":data.length,
           "log":data
         });
