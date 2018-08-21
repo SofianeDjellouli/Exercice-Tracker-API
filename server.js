@@ -93,27 +93,32 @@ app.route('/api/exercise/add').post((req,res)=> {
   })
 
 app.route('/api/exercise/log').get((req,res)=>{
-  var query={
-    "user":req.query.userId,
-  }
-  if (req.query.from && req.query.to){
-    query.date={"$gte":req.query.from,"$lte":req.query.to}
-  } else if(req.query.from){
-    query.date={"$gte":req.query.from}
-  } else if (req.query.to){
-    query.date={"$lte":req.query.to}
-  }
-  Exercice.find(query).limit(parseInt(req.query.limit)).select('-_id -user -__v')
-    .exec((err,data)=>{
-      if (err) res.send(err);
-      else {
-        console.log(User.findById(req.query.userId).exec())
-        res.json({
-          "_id":req.query.userId,
-          "username":user,
-          "count":data.length,
-          "log":data
-        });
+  User.findOne({_id:req.query.userId}).exec((err, dat)=>{
+    if (err) res.send(err);
+    else {
+      var query={
+        "user":req.query.userId,
       }
-    })
+      if (req.query.from && req.query.to){
+        query.date={"$gte":req.query.from,"$lte":req.query.to}
+      } else if(req.query.from){
+        query.date={"$gte":req.query.from}
+      } else if (req.query.to){
+        query.date={"$lte":req.query.to}
+      }
+      Exercice.find(query).limit(parseInt(req.query.limit)).select('-_id -user -__v')
+        .exec((err,data)=>{
+          if (err) res.send(err);
+          else {
+            console.log(User.findById(req.query.userId).exec())
+            res.json({
+              "_id":req.query.userId,
+              "username":dat.username,
+              "count":data.length,
+              "log":data
+            });
+          }
+        })
+    }
+  })
 })
