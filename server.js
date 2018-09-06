@@ -20,11 +20,6 @@ app.get('/', (req, res) => {
 });
 
 
-// Not found middleware
-// app.use((req, res, next) => {
-//   return next({status: 404, message: 'not found'})
-// })
-
 // Error Handling middleware
 app.use((err, req, res, next) => {
   let errCode, errMessage
@@ -72,14 +67,17 @@ app.route('/api/exercise/new-user').post((req,res)=> {
   })
 
 app.route('/api/exercise/add').post((req,res)=> {
+//   we get the user
     User.findOne({_id:req.body.userId},(err,data)=>{
       if (err) res.send(err);
       else {
+//         then create a new exercise
         Exercice.create({user: req.body.userId,
                          description:req.body.description,
                          duration:req.body.duration,
                          date:new Date(req.body.date).toDateString()},(err,dat)=>{
           if (err) res.send(err);
+//           then send it
           else res.json({
                 "username":data.username,
                 "description":dat.description,
@@ -93,12 +91,14 @@ app.route('/api/exercise/add').post((req,res)=> {
   })
 
 app.route('/api/exercise/log').get((req,res)=>{
+//   we look for the user's id and create an object to query the database
   User.findOne({_id:req.query.userId}).exec((err, dat)=>{
     if (err) res.send(err);
     else {
       var query={
         "user":req.query.userId,
       }
+//       handles the from and to request to the query object
       if (req.query.from && req.query.to){
         query.date={"$gte":req.query.from,"$lte":req.query.to}
       } else if(req.query.from){
@@ -106,6 +106,8 @@ app.route('/api/exercise/log').get((req,res)=>{
       } else if (req.query.to){
         query.date={"$lte":req.query.to}
       }
+//       handles the limit to the query
+//       queries the database and returns the result
       Exercice.find(query).limit(parseInt(req.query.limit)).select('-_id -user -__v')
         .exec((err,data)=>{
           if (err) res.send(err);
